@@ -5,8 +5,7 @@ import seaborn as sns
 import streamlit as st
 
 # Data Wrangling
-data_df = pd.read_csv("https://raw.githubusercontent.com/Danendracleo/Guanyuan.csv/main/PRSA_Data_Guanyuan_20130301-20170228.csv", parse_dates=['time'])
-data_df['year'] = data_df['time'].dt.year
+data_df = pd.read_csv("https://raw.githubusercontent.com/Danendracleo/Guanyuan.csv/main/PRSA_Data_Guanyuan_20130301-20170228.csv")
 data_df = data_df.drop(columns=['station'])
 data_df.fillna(method="ffill", inplace=True)
 
@@ -167,6 +166,7 @@ if selected_analysis_type == 'Individual Year':
     st.write("CO:", classification_results[3])
     st.write("O3:", classification_results[4])
     st.write("NO2:", classification_results[5])
+    st.pyplot(fig)
 
 else:
     # menghitung rata-rata polusi udara selama 5 tahun
