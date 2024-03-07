@@ -5,12 +5,12 @@ import seaborn as sns
 import streamlit as st
 
 # Data Wrangling
-data_df = pd.read_csv("https://raw.githubusercontent.com/Danendracleo/Guanyuan.csv/main/PRSA_Data_Guanyuan_20130301-20170228.csv")
-data_df = data_df.drop(columns=['station'])
-data_df.fillna(method="ffill", inplace=True)
+df = pd.read_csv("https://raw.githubusercontent.com/Danendracleo/Guanyuan.csv/main/PRSA_Data_Guanyuan_20130301-20170228.csv")
+df = df.drop(columns=['station'])
+df.fillna(method="ffill", inplace=True)
 
 # EDA
-average_pollution_by_year = data_df.groupby(by=['year']).agg({
+average_pollution_by_year = df.groupby(by=['year']).agg({
     "PM2.5": "mean",
     "PM10": "mean",
     "SO2": "mean",
@@ -19,7 +19,7 @@ average_pollution_by_year = data_df.groupby(by=['year']).agg({
     "O3": "mean"
 }).sort_values(by=['year'], ascending=True).reset_index()
 
-air_average_by_year = data_df.groupby(by=['year']).agg({
+air_average_by_year = df.groupby(by=['year']).agg({
     "TEMP": "mean",
     "PRES": "mean"
 }).sort_values(by=['year'], ascending=True).reset_index()
@@ -116,7 +116,7 @@ if selected_analysis_type == 'Individual Year':
     selected_year = st.sidebar.selectbox('Select Year', average_pollution_by_year['year'].unique())
 
     # Filter data untuk waktu tahun yg dipilih
-    selected_year_data = data_df[data_df['year'] == selected_year]
+    selected_year_data = df[df['year'] == selected_year]
 
     # Menampilkan dataset
     st.subheader(f'Sample of the dataset for {selected_year}:')
@@ -135,7 +135,7 @@ if selected_analysis_type == 'Individual Year':
 
     # Menampilkan rata-rata suhu dan tekanan udara pada tahun yang dipilih
     st.subheader(f'Mean Temperature and Pressure for {selected_year}')
-    mean_air_for_year = data_df[data_df['year'] == selected_year].groupby('month').agg({
+    mean_air_for_year = df[df['year'] == selected_year].groupby('month').agg({
         'TEMP': 'mean',
         'PRES': 'mean'
     }).reset_index()
@@ -169,7 +169,7 @@ if selected_analysis_type == 'Individual Year':
 
 else:
     # menghitung rata-rata polusi udara selama 5 tahun
-    mean_pollution_over_5_years = data_df.groupby('year').mean().reset_index()
+    mean_pollution_over_5_years = df.groupby('year').mean().reset_index()
 
     # Menampilkan rata-rata polusi udara 5 tahun 
     st.subheader('Mean Pollution Levels over 5 Years')
@@ -184,7 +184,7 @@ else:
 
     # Rata-rata suhu dan temperatur 5 tahun
     st.subheader('Mean Temperature and Pressure over 5 Years')
-    mean_air_over_5_years = data_df.groupby('year').agg({
+    mean_air_over_5_years = df.groupby('year').agg({
         'TEMP': 'mean',
         'PRES': 'mean'
     }).reset_index()
